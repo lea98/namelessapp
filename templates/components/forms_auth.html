@@ -1,0 +1,9 @@
+<div class='formauthdiv'>
+<form method='POST'> <!-- token so that other sites cant submit this form -->
+{% csrf_token %}
+{{form.as_p}}
+<button style='background-color:indigo;color:white;' type='submit' class='btn'>
+{{button_text}}</button>
+</form>
+</div>
+

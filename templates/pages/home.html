@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Hej people
+{% endblock title %} 
+
+{% block content %}
+
+<div id='postsComp' data-logged-user='{{user.get_username}}'> <!--change id to be like in react -->
+</div>
+
+<div class='row text-center d-none'>
+    <div class='col'>
+        <h2>Welcomee</h2>
+    </div>
+</div>
+
+
+<div class='row d-none'>
+    <div class='col-md-3 mb-4 mx-auto'>  <!--after adding react -->
+        <form class='form' id='create-post' method='POST' action='/create-post'> 
+            {% csrf_token %}
+            <input type='hidden' value='/' name='next'/>
+            <textarea class='form-control' name='content' placeholder='Write anything' required='required'></textarea>
+            <button type='submit' class='btn btn-primary'>SUBMIT</button>
+        </form>
+    </div>
+</div>
+
+
+<div class='row d-none' id='posts'> 
+    Loading ....
+</div>
+
+
+{% comment %} <script>
+function handleSubmit(event){
+    event.preventDefault() 
+    const newForm=event.target //console.log gives <form class="form" id="create-post" method="POST" action...
+    const newFormData = new FormData(newForm) 
+    const endpoint=newForm.getAttribute('action')
+    const method=newForm.getAttribute('method')
+    //console.log(endpoint,method)
+    const xhr = new XMLHttpRequest() 
+    const responseType = 'json'
+    xhr.responseType = responseType
+    xhr.open(method,endpoint)
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest") //for isajax() if it is ajax cll we can return different kind of response
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest") 
+    xhr.onload=function(){
+        if(xhr.status===201){
+        const newPost=xhr.response
+        //console.log(newPost.likes) //gives undifined if not adding json as response type
+
+       // console.log(serverResponse)  {"id": 15, "content": "e", "likes": 0} after adding ajax
+        const newPostElement=formatPosts(newPost)
+
+        const ogHtml=postsElement.innerHTML
+        //postsElement.prepend(newPostElement) //will render <div class='posts col-12...
+        postsElement.innerHTML=newPostElement+ogHtml // appends it at beggining
+        newForm.reset() //clear field
+        }
+        else if(xhr.status===400)
+        {
+            const err=xhr.response //in json
+            console.log(err)
+        }
+        else if(xhr.status===403)
+        {
+            alert('Please login')
+            window.location.href='/login'
+        }
+        else if (xhr.status===500){
+            alert('server error')
+        }
+        else if (xhr.status===401){ //not always
+            alert('Please login')
+            window.location.href='/login'
+        }
+        //loadingPosts(postsElement) //no need to refresh 
+        
+    }
+    xhr.onerror=function(){
+        alert('Error') //error on Javascript side
+    }
+    xhr.send(newFormData) //send data that came from the form
+}
+
+const postsElement = document.getElementById('posts')
+const createPost=document.getElementById('create-post')
+
+createPost.addEventListener('submit',handleSubmit)
+
+function loadingPosts(postsElement){
+    const xhr = new XMLHttpRequest() 
+    const method = 'GET' 
+    const url = 'http://127.0.0.1:8000/api/posts/' //api/posts??
+    const responseType = 'json'
+
+    xhr.responseType = responseType
+    xhr.open(method,url)
+    xhr.onload=function(){
+    const serverResponse=xhr.response
+    const list_posts = serverResponse //serverResponse.response  before adding rest framework
+    var finalPost = ""
+    var i;
+    for(i=0;i<list_posts.length;i++){
+        var current = formatPosts(list_posts[i])
+        finalPost+=current
+    }
+    postsElement.innerHTML = finalPost
+    }
+    xhr.send()
+}
+
+loadingPosts(postsElement)
+
+function handleLikeClick(post_id, likes_num, action){
+    //console.log(post_id, likes_num)
+    const url='/posts/action'
+    const method='POST'
+    const data=JSON.stringify({ //json dictionary
+        id:post_id,
+        action:action //default
+    })
+    const xhr=new XMLHttpRequest()
+    const cookie=getCookie('csrftoken');
+    xhr.open(method, url)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest") 
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest") 
+    xhr.setRequestHeader("X-CSRFToken",cookie)
+    xhr.onload=function(){
+        //console.log(xhr.status,xhr.response) //403 "{"detail":"CSRF Failed: CSRF token missing or incorrect."}"
+        //POST, and sending raw data- problem (https://docs.djangoproject.com/en/2.2/ref/csrf/
+        //use csfr in ajax request
+        loadingPosts(postsElement) //refresh all posts!!!
+    }
+    xhr.send(data)
+    return
+}
+
+function formatPosts(post){
+    return "<div class='posts col-12 border py-3' id='post-num-"+post.id+"'><h3>"+post.id + "</h3>" + post.content +"<br>"+ LikeButton(post)+DislikeButton(post)+"<br><br></div>"
+}
+
+function LikeButton(post){
+    return "<button class='btn btn-primary' onClick=handleLikeClick("+post.id+","+post.likes +",'like')>Like: "+post.likes+"</button>"
+}
+
+function DislikeButton(post){
+    return "<button class='btn btn-secondary' onClick=handleLikeClick("+post.id+","+post.likes +",'dislike')>Dislike: "+post.likes+"</button>"
+}
+
+function getCookie(name) { //django documentation
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+</script> {% endcomment %}
+{% endblock content %}
+

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class='formauthdiv'>
+<h1 style='text-align:center;'>{{title}}</h1>
+</div>
+{% include "components/forms_auth.html" with forms=forms button_text=button_text %} 
+
+{% endblock content %}
+

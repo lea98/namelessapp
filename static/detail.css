@@ -1,0 +1,42 @@
+@media(min-width: 600px) {
+    .profile_cont{
+        display: flex;
+    }
+    
+    .profile_cont_left{
+        flex: 2;
+        margin-left: 1em;;
+    }
+    
+    .profile_cont_right{
+        flex: 1; 
+        margin-top:3em;
+    }
+  }
+
+  #formid{
+    width: 30em;
+    border: outset;
+    padding:0.5em;
+    margin:auto;
+}
+
+@media screen and (max-width: 600px)
+{
+#formid{
+    width: auto;
+}
+}
+
+.formauthdiv{
+    width:30em;
+    border: outset;
+    padding:0.5em;
+    margin:auto;
+}
+@media screen and (max-width: 600px)
+{
+.formauthdiv{
+    width: auto;
+}
+}

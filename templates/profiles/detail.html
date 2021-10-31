@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 style='text-align:center'>{{username}}'s profile</h1>
+<div class='profile_cont'>
+<div class='profile_cont_right'>
+<div class='border border-primary'>
+<span>Username - {{username}}</span> <br>
+<span>Name - {{profile.user.first_name}}</span><br>
+<span>Surname - {{profile.user.last_name}}</span><br>
+<span>Mail - {{profile.user.email}}</span><br>
+<span>Location - {{profile.location}}</span><br>
+<span>About me - {{profile.about_me}}</span><br>
+<span>Member since - {{profile.timestamp}}</span>
+{% if profile.profile_image %}
+<img class='profile_image border border-primary' style='height:10em;width:10em;margin-top:1em' src='{{profile.profile_image.url}}'>
+{%endif%}
+</div>
+
+</div>
+<div class='profile_cont_left' id='postsComp' data-username='{{username}}' data-logged-user='{{user.get_username}}' data-has-permission='false'></div>
+
+</div>
+{% endblock content %}
